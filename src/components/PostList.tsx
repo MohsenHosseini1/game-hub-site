@@ -1,14 +1,29 @@
-import usePost from "../usePost.ts";
+import usePosts from "../hooks/usePosts.ts";
+// import {useState} from "react";
 
 const PostList = () => {
-    const {data,isPending,isError} = usePost()
+    const pageSize = 10;
+    // const [page, setPage] = useState(1);
+
+    const {data,isPending,isError,fetchNextPage} = usePosts(pageSize)
     return (
         <ul>
-            {data?.map(post => (
-                <li key={post.id}>
-                    {post.title}
-                </li>
-                ))}
+            {data?.pages.map(page => (
+                page.map(post => (
+                    <li key={post.id}>
+                        {post.title}
+                    </li>
+                ))
+            ))
+
+            }
+            <div>
+                <button onClick={() => {
+                    fetchNextPage()
+                }}>
+                    Next Page
+                </button>
+            </div>
         </ul>
     )
 }
